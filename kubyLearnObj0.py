@@ -20,6 +20,7 @@ with open(linuxInPath,newline='') as csvinput:
             if "compare" in curRow or "contrast" in curRow:
                 
                 row.append("Analyze")
+                row.append("Conceptual")
 
             elif ("offer" in curRow or "create" in curRow 
                 or "provide" in curRow or "categorize" in curRow
@@ -27,24 +28,29 @@ with open(linuxInPath,newline='') as csvinput:
                 or "propose" in curRow):
 
                 row.append("Create")
+                row.append("Procedural")
 
             elif "evaluate" in curRow:
 
                 row.append("Evaluate")
+                row.append("Metacognitive")
 
             elif ("apply" in curRow or "application" in curRow 
                 or "predict" in curRow or "show why" in curRow):
 
                 row.append("Apply")
+                row.append("Procedural")
                 
             elif ("identify" in curRow or "outline" in curRow 
                 or "articulate" in curRow):
 
                 row.append("Remember")
+                row.append("Factual")
 
             else: #elif "describe" in curRow or "understand" in curRow or "explain" in curRow:
 
                 row.append("Understand")
+                row.append("Conceptual")
 
             all.append(row)
 
