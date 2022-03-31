@@ -48,7 +48,7 @@ Outline the major differences between type 1 and type 2 immune responses and und
 "Identify the four main memory T-cell subsets, understand their functions, and speculate about their origin.",,Remember
 "Recognize some of the questions that still remain as we work to understand T-cell activation, differentiation, and memory.",,Understand
 Describe the essential tenets of the clonal selection hypothesis.,,Understand
-"Draw a lymph node; label the B-cell follicles and the T-cell areas. Show the path of migration of a B cell as it participates in a T-dependent response, indicating  the sites of contact between antigen and T cells  and the chemokine receptor–ligand interactions that drive these migrations.",,Understand
+"Draw a lymph node; label the B-cell follicles and the T-cell areas. Show the path of migration of a B cell as it participates in a T-dependent response, indicating  the sites of contact between antigen and T cells  and the chemokine receptor–ligand interactions that drive these migrations.",,Create
 "Compare and contrast the processes of class switch recombination and somatic hypermutation with respect to the time after antigen stimulation at which they occur, their requirements for activation-induced cytidine deaminase, their need for an organized germinal center structure, and their outcomes.",,Analyze
 "Explain the differences between T-independent and T-dependent B-cell responses, describing the B-cell subsets that participate in each type of response and the biochemical nature of the antigens that evoke them.",,Understand
 "Explain how humoral immune responses protect us against pathogens, toxins, or malignancy.",,Understand
@@ -80,9 +80,9 @@ Identify the variables that influence immune cell homing and localization.,,Reme
 "Describe and categorize the methods used by different infectious organisms to evade the host immune defense, and explain how each subverts elements of host immunity.",,Create
 Explain the difference between passive and active immunization and evaluate which is most appropriate for protecting against a given disease.,,Evaluate
 Describe the components of a typical vaccine and the role played by each one.,,Understand
-"Propose the appropriate correlates of immune protection for a newly emerged pathogen, and develop a test to measure the presence of this correlate.",,Understand
+"Propose the appropriate correlates of immune protection for a newly emerged pathogen, and develop a test to measure the presence of this correlate.",,Create
 "Create a hypothetical vaccine by selecting the formulation, adjuvant, administration route, and schedule most appropriate for the target population and desired immune outcome by applying sound immunologic reasoning as well as provide justification, including a cost/benefit analysis, for your choices.",,Create
-Compare and contrast primary and secondary immunodeficiency diseases; provide examples of each.,,Create
+Compare and contrast primary and secondary immunodeficiency diseases; provide examples of each.,,Analyze
 "Explain why some primary immunodeficiencies  are called severe combined immunodeficiencies, including what is common about their effects on  the immune system, while others are not; provide  examples of both types.",,Create
 Describe three treatments currently employed to treat primary immunodeficiency diseases and the types of immunodeficiencies for which they are used.,,Understand
 List four aspects of the biology of HIV that make it so difficult for both the immune system and antiretroviral therapy to eliminate the virus in an infected individual.,,Understand
@@ -90,5 +90,5 @@ Identify two reasons why it is so difficult to generate an effective vaccine for
 Demonstrate how innate and adaptive immune response pathways and molecules are involved in the recognition and eradication of cancer cells and compare this with other pathways and molecules that might foster a more pro-tumor microenvironment.,,Analyze
 "Explain the concept of central and peripheral immune tolerance as it relates to cancer cells, comparing its impact on the immune recognition of tumor-associated antigens versus tumor-specific antigens.",,Understand
 "Explain the various phases of cancer immunoediting, predict the stage or prognosis of a cancer, and design a test to confirm your prediction.",,Apply
-Critically evaluate and estimate the effectiveness of a new immune-based anticancer therapy and predict how the immunoscore of a cancer will impact the therapy choices.,,Apply
-Formulate a new immunotherapy based on the principles behind existing therapies or propose a novel immunotherapy strategy using sound immunologic reasoning.,,Understand
+Critically evaluate and estimate the effectiveness of a new immune-based anticancer therapy and predict how the immunoscore of a cancer will impact the therapy choices.,,Evaluate
+Formulate a new immunotherapy based on the principles behind existing therapies or propose a novel immunotherapy strategy using sound immunologic reasoning.,,Create
