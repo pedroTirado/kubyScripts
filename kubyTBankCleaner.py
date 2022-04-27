@@ -3,6 +3,9 @@ import csv
 """
 TIME CLOCKED-IN:
     04/21/2022 ---> 8 hrs
+    04/27/2022:
+        CLOCK-IN: 1:00PM
+        CLOCK-OUT: ???
 
 MACROS:
 print("",) # DEBUG
@@ -12,15 +15,15 @@ macInPath = '/Users/dro/Documents/' # input file path on dro's macPro
 macOutPath = '/Users/dro/Documents/'
 debInPath = '/home/dro/kubyScripts/' # input file path on dro's debian
 debOutPath = '/home/dro/kubyScripts/'
-buntuInPath = '/data/birc/home/pedrotirado/kubyScripts/origCopies/' # input file path on dro's ubuntu
-buntuOutPath = '/data/birc/home/pedrotirado/kubyScripts/editedCopies/'
+buntuInPath = '/data/birc/home/pedrotirado/kubyFiles/origCopies/' # input file path on dro's ubuntu
+buntuOutPath = '/data/birc/home/pedrotirado/kubyFiles/editedCopies/'
 
 """
 load accessory metadata from .txt files
 """
-def loadTxtMeta(file = ''):
+def loadQs(file: str, chQs: dict):
     
-    chaptQs = {}
+    # chQs = {}
     curLine = ''
     curPrompt = ''
     chName = ''
@@ -44,27 +47,29 @@ def loadTxtMeta(file = ''):
 
                 elif 'chaptername' in curLine: # if is chapter name...
                     
-                    chName = curLine[-2:-1] # extracts the integer val. only
+                    chName = int(curLine[-2:-1]) # extracts the integer val. only
                     # print(curLine) # DEBUG
                     # print("num:",repr(curLine[-2:-1])) # DEBUG
                 
-                elif 'bloomslevel' in curLine:
+                elif 'bloomslevel:' in curLine:
                     blooms = curLine[curLine.index(':  ')+3:-1]
-                    chaptQs[curPrompt] = {chName, blooms} 
+                    # print("blooms:",repr(blooms)) # DEBUG
+                    chQs[curPrompt] = [chName, blooms] 
+                    # print("blooms:",repr(curLine)) # DEBUG
                 
                 curLine = str(f.readline())
                 # print("curLine:", curLine) # DEBUG
             
-            # print("chaptQs:", chaptQs) # DEBUG
+            # print("chQs:", chQs) # DEBUG
     else:
         print("ERROR: Can't load specified txt file!")
     
-    return chaptQs
+    return chQs
 
 """
 load accessory metadata from taxonChaptIDs.csv
 """
-def loadChID(chaptIDs):
+def loadChIDs(chaptIDs: dict):
     with open(buntuInPath + 'taxonChaptIDs.csv') as r:
         reader = csv.reader(r, delimiter=',')
         
@@ -77,10 +82,10 @@ def loadChID(chaptIDs):
 review prompt in column K (col. #11 - mc_prompt), and fill in this column (col. #2 - destination_topic)
 with the relevant chapter ID; chapter codes can be found in ---> taxonChaptIDs.csv
 """
-def cleanColB(colK: str = ""):
+def cleanColB(colK: str):
     # print("colK:",colK) # DEBUG
 
-    chID = 0
+    chID = -1
     global ch1Qs
     global ch2Qs
     global chaptIDs
@@ -92,10 +97,16 @@ def cleanColB(colK: str = ""):
     q = colK[3:colK.index('</p>')] # slices away the <p>...</p>
     # print("q:",q) # DEBUG
     
+    
+    
     if ch1Qs.get(q) != None:
-        chID = chaptIDs["Chapter 1"]
+        if ch1Qs.get(q)[0] == 1:
+            # print("ch1Qs.get(q)[0]:",ch1Qs.get(q)[0]) # DEBUG
+            # print("chaptIDs[Chapter 1]:",chaptIDs["Chapter 1"]) # DEBUG
+            chID = chaptIDs["Chapter 1"]
     elif ch2Qs.get(q) != None:
-        chID = chaptIDs["Chapter 2"]
+        if ch2Qs.get(q)[0] == 2:
+            chID = chaptIDs["Chapter 2"]
     else:
         chID = -1 # specified prompt (col. K) DNE in available question bank dictionaries
 
@@ -111,22 +122,50 @@ assign a Webb's Depth of Knowledge
 
 correlation based on Bloom's (https://uen.instructure.com/courses/314069/files/70811844/preview?verifier=XrzkpNsZVLMJnXLhYgfx41G0BpMwE9bhCXFKtXNT)
 """
-def cleanColE():
-    ...
+def cleanColE(colK: str):
+    match row:
+        # case ...
+        case _:
+            print("ERROR: sumting went wong!")
 
+"""
+- review entry & ensure that there is one <p> at the start, one </p> at the end
+- remove paragraph tags (<p>, </p>) that are in the middle of sentences
+  (open and close tags around image coding can be left as is)
+- all other HTML markup in this column should be kept as is
+- flag col. K entries containing figure/table references for 'extra attention'
+"""
+def cleanColK(colK: str):
+    
+    trimCol = ''
+    isClean = True
+    # print("colK[:3]",repr(colK[:3])) # DEBUG
+    # print("colK[-4:]",repr(colK[-4:])) # DEBUG
+
+    if colK[:3] == '<p>':
+        # print("hit here!")
+        if colK[-4:] == '</p>':
+            # print("hit here too!")
+            trimCol = colK[3:-4] # slices away the <p>...</p>
+
+            if '<p>' in trimCol:
+                # print("WARN: Extraneous <p> found in Q-prompt!\nAttempting to remove") # DEBUG
+                isClean = False
+                print("index of extraneous <p>:", trimCol.index('<p>'))
+            if '</p>' in trimCol:
+                # print("WARN: Extraneous </p> found in Q-prompt!\nAttempting to remove") # DEBUG
+                isClean = False
+        else:
+            print("ERROR: Entry missing closing paragraph tag!")
+    else:
+        print("ERROR: Entry missing opening paragraph tag!")
+    
+    return isClean
 
 if __name__ == "__main__":
 
     ch1Qs = {}
     ch2Qs = {}
-    ch1Qs = loadTxtMeta('tbankCh1.txt')
-    ch2Qs = loadTxtMeta('tbankCh2.txt')
-
-    # print("tbankCh1Buff", tbankCh1Buff) # DEBUG
-    # print("tbankCh2Buff", tbankCh2Buff) # DEBUG
-
-    # print("ch1Qs:", ch1Qs) # DEBUG
-    # print("ch2Qs:", ch2Qs) # DEBUG
 
     chID = 0
 
@@ -138,7 +177,16 @@ if __name__ == "__main__":
                 'Chapter 16': -1,'Chapter 17': -1,'Chapter 18': -1,
                 'Chapter 19': -1,'Chapter 20': -1}
     
-    loadChID(chaptIDs)
+    loadChIDs(chaptIDs)
+
+    loadQs('tbankCh1.txt', ch1Qs)
+    loadQs('tbankCh2.txt', ch2Qs)
+
+    # print("tbankCh1Buff", tbankCh1Buff) # DEBUG
+    # print("tbankCh2Buff", tbankCh2Buff) # DEBUG
+
+    # print("ch1Qs:", ch1Qs) # DEBUG
+    # print("ch2Qs:", ch2Qs) # DEBUG
 
     # print("chaptIDs:", chaptIDs) # DEBUG
 
@@ -150,14 +198,15 @@ if __name__ == "__main__":
             all = []
             row = next(reader)
 
+            count = 1
             for row in reader:
+                count += 1
+                if cleanColK(str(row[10])) == False:
+                    print("WARN: row[" + str(count) + "], colK contains extraneous characters!") # DEBUG
 
-                chID = cleanColB(str(row[10])) # row[10] ---> col. #11 ---> mc_prompt
+                # chID = cleanColB(str(row[10])) # row[10] ---> col. #11 ---> mc_prompt
 
-                # print("chID:",chID) # DEBUG
-
-                if chID != -1: # corresp. chapter ID could be discerned...
-                    
-                    row[1] = chID # row[1] ---> col. #2 ---> destination_topic
-                
-                writer.writerow(row)
+                # # print("chID:",chID) # DEBUG
+                # if chID != -1: # corresp. chapter ID could be discerned...
+                #     row[1] = chID # row[1] ---> col. #2 ---> destination_topic
+                # writer.writerow(row)
