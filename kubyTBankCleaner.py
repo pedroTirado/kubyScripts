@@ -94,18 +94,18 @@ def cleanColB(colK: str):
     # print("ch1Qs:",ch2Qs) # DEBUG
 
     # q = colK[3:-4] # slices away the <p>...</p>
-    q = colK[3:colK.index('</p>')] # slices away the <p>...</p>
+    # q = colK[3:colK.index('</p>')] # slices away the <p>...</p>
     # print("q:",q) # DEBUG
     
     
     
-    if ch1Qs.get(q) != None:
-        if ch1Qs.get(q)[0] == 1:
-            # print("ch1Qs.get(q)[0]:",ch1Qs.get(q)[0]) # DEBUG
+    if ch1Qs.get(colK) != None:
+        if ch1Qs.get(colK)[0] == 1:
+            # print("ch1Qs.get(colK)[0]:",ch1Qs.get(colK)[0]) # DEBUG
             # print("chaptIDs[Chapter 1]:",chaptIDs["Chapter 1"]) # DEBUG
             chID = chaptIDs["Chapter 1"]
-    elif ch2Qs.get(q) != None:
-        if ch2Qs.get(q)[0] == 2:
+    elif ch2Qs.get(colK) != None:
+        if ch2Qs.get(colK)[0] == 2:
             chID = chaptIDs["Chapter 2"]
     else:
         chID = -1 # specified prompt (col. K) DNE in available question bank dictionaries
@@ -139,7 +139,6 @@ def cleanColE(colK: str):
 def cleanColK(colK: str):
     
     trimCol = ''
-    isClean = True
     # print("colK[:3]",repr(colK[:3])) # DEBUG
     # print("colK[-4:]",repr(colK[-4:])) # DEBUG
 
@@ -148,20 +147,20 @@ def cleanColK(colK: str):
         if colK[-4:] == '</p>':
             # print("hit here too!")
             trimCol = colK[3:-4] # slices away the <p>...</p>
-
-            if '<p>' in trimCol:
-                # print("WARN: Extraneous <p> found in Q-prompt!\nAttempting to remove") # DEBUG
-                isClean = False
-                print("index of extraneous <p>:", trimCol.index('<p>'))
-            if '</p>' in trimCol:
-                # print("WARN: Extraneous </p> found in Q-prompt!\nAttempting to remove") # DEBUG
-                isClean = False
+            
+            # if '<p>' in trimCol:
+            #     # print("WARN: Extraneous <p> found in Q-prompt!\nAttempting to remove") # DEBUG
+            #     isClean = False
+            #     print("index of extraneous <p>:", trimCol.index('<p>'))
+            # if '</p>' in trimCol:
+            #     # print("WARN: Extraneous </p> found in Q-prompt!\nAttempting to remove") # DEBUG
+            #     isClean = False
         else:
             print("ERROR: Entry missing closing paragraph tag!")
     else:
         print("ERROR: Entry missing opening paragraph tag!")
     
-    return isClean
+    return trimCol
 
 if __name__ == "__main__":
 
@@ -202,8 +201,8 @@ if __name__ == "__main__":
             count = 1
             for row in reader:
                 if count != 1:
-                    if cleanColK(str(row[10])) == False:
-                        print("WARN: row[" + str(count) + "], colK contains extraneous characters!") # DEBUG
+
+                    row[10] = cleanColK(str(row[10]))
 
                     chID = cleanColB(str(row[10])) # row[10] ---> col. #11 ---> mc_prompt
 
