@@ -13,8 +13,8 @@ print("",) # DEBUG
 
 macInPath = '/Users/dro/Documents/' # input file path on dro's macPro
 macOutPath = '/Users/dro/Documents/'
-debInPath = '/home/dro/kubyScripts/' # input file path on dro's debian
-debOutPath = '/home/dro/kubyScripts/'
+debInPath = '/home/dro/kubyFiles/origCopies/' # input file path on dro's debian
+debOutPath = '/home/dro/kubyFiles/editedCopies/'
 buntuInPath = '/data/birc/home/pedrotirado/kubyFiles/origCopies/' # input file path on dro's ubuntu
 buntuOutPath = '/data/birc/home/pedrotirado/kubyFiles/editedCopies/'
 
@@ -30,7 +30,7 @@ def loadQs(file: str, chQs: dict):
     blooms = ''
 
     if file != '':
-        with open(buntuInPath + file, 'r') as f:
+        with open(debInPath + file, 'r') as f:
             
             # return f.read() # returns contents of entire file
             curLine = str(f.readline())
@@ -45,10 +45,10 @@ def loadQs(file: str, chQs: dict):
                     curPrompt = curLine[curLine.index('.  ')+3:-1]
                     # print("curPrompt:", curPrompt) # DEBUG
 
-                elif 'chaptername' in curLine: # if is chapter name...
+                elif 'chaptername:' in curLine: # if is chapter name...
                     
-                    chName = int(curLine[-2:-1]) # extracts the integer val. only
                     # print(curLine) # DEBUG
+                    chName = int(curLine[-2:-1]) # extracts the integer val. only
                     # print("num:",repr(curLine[-2:-1])) # DEBUG
                 
                 elif 'bloomslevel:' in curLine:
@@ -70,7 +70,7 @@ def loadQs(file: str, chQs: dict):
 load accessory metadata from taxonChaptIDs.csv
 """
 def loadChIDs(chaptIDs: dict):
-    with open(buntuInPath + 'taxonChaptIDs.csv') as r:
+    with open(debInPath + 'chIDs.csv') as r:
         reader = csv.reader(r, delimiter=',')
         
         row = next(reader)
@@ -123,10 +123,11 @@ assign a Webb's Depth of Knowledge
 correlation based on Bloom's (https://uen.instructure.com/courses/314069/files/70811844/preview?verifier=XrzkpNsZVLMJnXLhYgfx41G0BpMwE9bhCXFKtXNT)
 """
 def cleanColE(colK: str):
-    match row:
-        # case ...
-        case _:
-            print("ERROR: sumting went wong!")
+    # match row:
+    #     # case ...
+    #     case _:
+    #         print("ERROR: sumting went wong!")
+    ...
 
 """
 - review entry & ensure that there is one <p> at the start, one </p> at the end
@@ -190,23 +191,24 @@ if __name__ == "__main__":
 
     # print("chaptIDs:", chaptIDs) # DEBUG
 
-    with open(buntuInPath + 'mc.csv',newline='') as csvinput:
-        with open(buntuOutPath + 'mc_edited.csv','w',newline='') as csvoutput:
+    with open(debInPath + 'mc.csv',newline='') as csvinput:
+        with open(debOutPath + 'mc_edited.csv','w',newline='') as csvoutput:
             reader = csv.reader(csvinput, delimiter=',')
             writer = csv.writer(csvoutput, delimiter=',')
 
             all = []
-            row = next(reader)
+            # row = next(reader)
 
             count = 1
             for row in reader:
+                if count != 1:
+                    if cleanColK(str(row[10])) == False:
+                        print("WARN: row[" + str(count) + "], colK contains extraneous characters!") # DEBUG
+
+                    chID = cleanColB(str(row[10])) # row[10] ---> col. #11 ---> mc_prompt
+
+                    # print("chID:",chID) # DEBUG
+                    if chID != -1: # corresp. chapter ID could be discerned...
+                        row[1] = chID # row[1] ---> col. #2 ---> destination_topic
+                writer.writerow(row)
                 count += 1
-                if cleanColK(str(row[10])) == False:
-                    print("WARN: row[" + str(count) + "], colK contains extraneous characters!") # DEBUG
-
-                # chID = cleanColB(str(row[10])) # row[10] ---> col. #11 ---> mc_prompt
-
-                # # print("chID:",chID) # DEBUG
-                # if chID != -1: # corresp. chapter ID could be discerned...
-                #     row[1] = chID # row[1] ---> col. #2 ---> destination_topic
-                # writer.writerow(row)
