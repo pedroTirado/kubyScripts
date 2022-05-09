@@ -97,8 +97,6 @@ def cleanColB(colK: str):
     # q = colK[3:colK.index('</p>')] # slices away the <p>...</p>
     # print("q:",q) # DEBUG
     
-    
-    
     if ch1Qs.get(colK) != None:
         if ch1Qs.get(colK)[0] == 1:
             # print("ch1Qs.get(colK)[0]:",ch1Qs.get(colK)[0]) # DEBUG
@@ -115,19 +113,25 @@ def cleanColB(colK: str):
 
 """
 assign a Webb's Depth of Knowledge
-1-Recall <---> Understanding/Remembering
-2-Skill/Concept <---> Applying
-3-Strategic Thinking <---> Analyzing
+1-Recall <---> 1-Remembering
+2-Skill/Concept <---> 3-Applying
+3-Strategic Thinking <---> 4-Analyzing
 4-Extended Thinking <---> Evaluating/Creating
 
 correlation based on Bloom's (https://uen.instructure.com/courses/314069/files/70811844/preview?verifier=XrzkpNsZVLMJnXLhYgfx41G0BpMwE9bhCXFKtXNT)
 """
-def cleanColE(colK: str):
-    # match row:
-    #     # case ...
-    #     case _:
-    #         print("ERROR: sumting went wong!")
-    ...
+def cleanColE(colC: str):
+    wdok = '' # Webb's DOK
+    global ch1Qs
+    global ch2Qs
+    q = colK[3:colK.index('</p>')] # slices away the <p>...</p>
+    
+    # if ch1Qs.get(q) != None:
+    #     print("ch1Q Bloom's:",ch1Qs.get(q)[1])
+    # elif ch2Qs.get(q) != None:
+    #     print("ch1Q Bloom's:",ch2Qs.get(q)[1])
+    # else:
+    #     print("Q not in ch1 or 2...")
 
 """
 - review entry & ensure that there is one <p> at the start, one </p> at the end
@@ -148,13 +152,14 @@ def cleanColK(colK: str):
             # print("hit here too!")
             trimCol = colK[3:-4] # slices away the <p>...</p>
             
-            # if '<p>' in trimCol:
-            #     # print("WARN: Extraneous <p> found in Q-prompt!\nAttempting to remove") # DEBUG
-            #     isClean = False
-            #     print("index of extraneous <p>:", trimCol.index('<p>'))
-            # if '</p>' in trimCol:
-            #     # print("WARN: Extraneous </p> found in Q-prompt!\nAttempting to remove") # DEBUG
-            #     isClean = False
+            if '<p>' in trimCol:
+                print("WARN: Extraneous <p> found in Q-prompt!\nAttempting to remove") # DEBUG
+                print("index of extraneous <p>:", trimCol.index('<p>'))
+
+            if '</p>' in trimCol:
+                print("WARN: Extraneous </p> found in Q-prompt!\nAttempting to remove") # DEBUG
+                print("index of extraneous </p>:", trimCol.index('</p>'))
+                isClean = False
         else:
             print("ERROR: Entry missing closing paragraph tag!")
     else:
@@ -202,12 +207,13 @@ if __name__ == "__main__":
             for row in reader:
                 if count != 1:
 
-                    row[10] = cleanColK(str(row[10]))
-
+                    # row[10] = cleanColK(str(row[10])) 
                     chID = cleanColB(str(row[10])) # row[10] ---> col. #11 ---> mc_prompt
-
                     # print("chID:",chID) # DEBUG
                     if chID != -1: # corresp. chapter ID could be discerned...
                         row[1] = chID # row[1] ---> col. #2 ---> destination_topic
+                    
+                    cleanColE(str(row[10]))
+
                 writer.writerow(row)
                 count += 1
